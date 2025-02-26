@@ -1,12 +1,6 @@
 # is-local-address
 
-> Regex for matching localhost alike URLs.
-
-**Note**: There are [Bogon IP address](https://ipinfo.io/bogon) ranges not covered by this regex.
-
-The intention of this package is to cover some of the most common cases.
-
-If you need a more sophisticated solution, check [is-localhost-ip](https://github.com/tinovyatkin/is-localhost-ip).
+> Check if an URL hostname is a local address, including support for [Bogon IP address](https://ipinfo.io/bogon) ranges.
 
 ## Install
 
