@@ -27,7 +27,7 @@ const IP_RANGES = [
   'localhost'
 ]
 
-const regex = new RegExp(`^(:{2}f{4}:)?(${IP_RANGES.join('|')})$`)
+const regex = new RegExp(`^(${IP_RANGES.join('|')})$`)
 
 module.exports = regex.test.bind(regex)
 module.exports.regex = regex
