@@ -1,12 +1,12 @@
 # is-local-address
 
-> Regex for matching localhost alike URLs.
+> Check if an URL hostname is a local address, including support for [Bogon IP address](https://ipinfo.io/bogon) ranges.
 
-**Note**: There are [Bogon IP address](https://ipinfo.io/bogon) ranges not covered by this regex.
+Most solutions typically determine local IP addresses by checking DNS.
 
-The intention of this package is to cover some of the most common cases.
+However, this implementation uses the Bogon IP address specification, delivering performance five times faster than alternative approaches.
 
-If you need a more sophisticated solution, check [is-localhost-ip](https://github.com/tinovyatkin/is-localhost-ip).
+Check [benchmark](/benchmark) for detailed performance metrics.
 
 ## Install
 
@@ -16,7 +16,7 @@ $ npm install is-local-address --save
 
 ## Usage
 
-The method exported by default supports IPv4 and IPv6 detection:
+The method exported by default supports detection of both IPv4 and IPv6 addresses:
 
 ```js
 const isLocalAddress = require('is-local-address')
@@ -25,7 +25,7 @@ isLocalAddress(new URL('https://127.0.0.1').hostname) // true
 isLocalAddress(new URL('http://[::]:3000').hostname) // true
 ```
 
-You can also require the specific IPv4:
+You can also specify to just resolve IPv4:
 
 ```js
 const isLocalAddress = require('is-local-address/ipv4')
