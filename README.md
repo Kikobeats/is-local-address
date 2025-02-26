@@ -2,6 +2,12 @@
 
 > Check if an URL hostname is a local address, including support for [Bogon IP address](https://ipinfo.io/bogon) ranges.
 
+Most solutions typically determine local IP addresses by checking DNS.
+
+However, this implementation uses the Bogon IP address specification, delivering performance five times faster than alternative approaches.
+
+Check [benchmark](/benchmark) for detailed performance metrics.
+
 ## Install
 
 ```bash
@@ -10,7 +16,7 @@ $ npm install is-local-address --save
 
 ## Usage
 
-The method exported by default supports IPv4 and IPv6 detection:
+The method exported by default supports detection of both IPv4 and IPv6 addresses:
 
 ```js
 const isLocalAddress = require('is-local-address')
@@ -19,7 +25,7 @@ isLocalAddress(new URL('https://127.0.0.1').hostname) // true
 isLocalAddress(new URL('http://[::]:3000').hostname) // true
 ```
 
-You can also require the specific IPv4:
+You can also specify to just resolve IPv4:
 
 ```js
 const isLocalAddress = require('is-local-address/ipv4')

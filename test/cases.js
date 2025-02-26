@@ -1,3 +1,5 @@
+'use strict'
+
 const { isIP } = require('net')
 
 const IP_RANGES = [
