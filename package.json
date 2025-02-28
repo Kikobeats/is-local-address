@@ -3,10 +3,11 @@
   "description": "Static check if a hostname is a local IP address.",
   "homepage": "https://github.com/Kikobeats/is-local-address",
   "version": "2.1.3",
+  "types": "src/index.d.ts",
   "exports": {
     ".": "./src/index.js",
-    "./ipv4": "./src/ipv4.js",
-    "./ipv6": "./src/ipv6.js"
+    "./ipv4": "./src/ipv4/index.js",
+    "./ipv6": "./src/ipv6/index.js"
   },
   "author": {
     "email": "josefrancisco.verdu@gmail.com",
@@ -47,7 +48,8 @@
     "redos-detector": "latest",
     "simple-git-hooks": "latest",
     "standard": "latest",
-    "standard-version": "latest"
+    "standard-version": "latest",
+    "tsd": "latest"
   },
   "engines": {
     "node": ">= 10"
@@ -59,7 +61,7 @@
     "clean": "rm -rf node_modules",
     "contributors": "(npx git-authors-cli && npx finepack && git add package.json && git commit -m 'build: contributors' --no-verify) || true",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "lint": "standard",
+    "lint": "tsd && standard",
     "postrelease": "npm run release:tags && npm run release:github && (ci-publish || npm publish --access=public)",
     "pretest": "npm run lint && npm run redos",
     "redos": "npm run redos:ipv4 && npm run redos:ipv6",
@@ -99,5 +101,8 @@
   "simple-git-hooks": {
     "commit-msg": "npx commitlint --edit",
     "pre-commit": "npx nano-staged"
+  },
+  "tsd": {
+    "directory": "test"
   }
 }
