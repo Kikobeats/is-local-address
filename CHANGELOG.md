@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.2.0 (2025-02-28)
+
+
+### Features
+
+* add types ([#14](https://github.com/Kikobeats/is-local-address/issues/14)) ([44ec699](https://github.com/Kikobeats/is-local-address/commit/44ec699561476265ff478333d98fd39a5f9a8728))
+
 ### 2.1.3 (2025-02-26)
 
 ### 2.1.2 (2025-02-26)
