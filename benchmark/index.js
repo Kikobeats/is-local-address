@@ -2,7 +2,7 @@
 
 const fs = require('fs')
 const path = require('path')
-
+const ipaddr = require('ipaddr.js')
 const { internalIPs, externalIPs } = require('../test/cases')
 
 const booleanEmoji = value =>
@@ -11,6 +11,21 @@ const booleanEmoji = value =>
 const escape = value => `\`${value}\``
 
 const ips = internalIPs.concat(externalIPs).map(({ ip }) => ip)
+
+function isPrivateIpAddr(ip) {
+  if (ip === 'localhost') {
+    return true;
+  }
+  if (!ipaddr.isValid(ip)) {
+    return false;
+  }
+  let addr = ipaddr.parse(ip);
+  if (addr.kind() === 'ipv6' && addr.isIPv4MappedAddress()) {
+    addr = addr.toIPv4Address();
+  }
+  const range = addr.range();
+  return range !== 'unicast';
+}
 
 const createBench = cases => {
   const testCases = []
@@ -24,9 +39,9 @@ const createBench = cases => {
   const run = () => {
     results = []
     testCases.forEach(({ name, fn }) => {
-      let duration = Date.now()
+      let duration = performance.now()
       const output = cases.map(input => fn(input))
-      duration = Date.now() - duration
+      duration = performance.now() - duration
       results.push({ name, duration, output })
     })
 
@@ -48,7 +63,7 @@ const createBench = cases => {
       '| Name | Duration |',
       '|------|----------|',
       ...results.map(
-        ({ name, duration }) => `| ${escape(name)} | ${duration}ms |`
+        ({ name, duration }) => `| ${escape(name)} | ${duration.toFixed(2)}ms |`
       )
     ].join('\n')
 
@@ -105,5 +120,7 @@ const createBench = cases => {
 
 createBench(ips)
   .add('is-local-address', require('../src'))
+  .add('ipaddr.js', isPrivateIpAddr)
   .add('private-ip', require('./private-ip').default)
   .run()
+
