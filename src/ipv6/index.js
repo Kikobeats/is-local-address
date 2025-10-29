@@ -1,9 +1,11 @@
 'use strict'
 
+const ipv4 = require('../ipv4')
+
 const IP_RANGES = [
-  // Matches IPv4-mapped, IPv4-translated, and IPv4-embedded IPv6 addresses
-  /^::f{4}:0?([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/,
-  // Matches IPv6 addresses in the 64:ff9b::/96 range
+  // Matches IPv4-mapped IPv6 addresses in dotted decimal format: ::ffff:192.168.0.1
+  /^::f{4}:(?:0:)?([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/,
+  // Matches IPv6 addresses in the 64:ff9b::/96 range (NAT64)
   /^64:ff9b::([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/,
   // Matches IPv6 addresses in the 100::/64 range
   /^100:(:[0-9a-fA-F]{0,4}){0,6}$/,
@@ -17,29 +19,61 @@ const IP_RANGES = [
   /^2001:db8:([0-9a-fA-F]{0,4}:){0,7}[0-9a-fA-F]{0,4}$/,
   // Matches IPv6 addresses in the 3fff::/20 range (documentation prefix)
   /^3fff:([0-9a-fA-F]{0,4}:){0,7}[0-9a-fA-F]{0,4}$/,
-  // Matches IPv6 addresses in the fc00::/7 range (ULA)
+  // Matches IPv6 addresses in the fc00::/7 range (ULA + optional legacy fb00)
   /^f[b-d][0-9a-fA-F]{2}:([0-9a-fA-F]{0,4}:){0,7}[0-9a-fA-F]{0,4}$/i,
   // Matches IPv6 addresses in the fe80::/10 range (link-local)
-  /^fe[8-9a-bA-B][0-9a-fA-F]:/i,
-  // Matches IPv6 multicast addresses
-  /^ff([0-9a-fA-F]{2,2}):/i,
-  // Matches IPv6 addresses in the ff00::/8 range (Multicast)
-  /^ff00:([0-9a-fA-F]{0,4}:){0,7}[0-9a-fA-F]{0,4}$/,
-  // Matches localhost in IPv6
+  /^fe[89ab][0-9a-fA-F]:(?:[0-9a-fA-F]{0,4}:){0,6}[0-9a-fA-F]{0,4}$/i,
+  // Matches IPv6 multicast addresses in the ff00::/8 range (includes ff02::1)
+  /^ff[0-9a-fA-F]{2}:(?:[0-9a-fA-F]{0,4}:){0,6}[0-9a-fA-F]{0,4}$/i,
+  // Matches localhost in IPv6 (:: or ::1)
   /^::1?$/,
-  // Matches IPv6 addresses in the fec0::/10 range (Site-local unicast)
+  // Matches IPv6 addresses in the fec0::/10 range (deprecated site-local unicast)
   /^fec0:([0-9a-fA-F]{0,4}:){0,7}[0-9a-fA-F]{0,4}$/i,
-  // Matches IPv6 addresses in the 2002::/16 range
+  // Matches IPv6 addresses in the 2002::/16 range (6to4)
   /^2002:([0-9a-fA-F]{0,4}:){0,7}[0-9a-fA-F]{0,4}$/
 ]
 
 const regex = new RegExp(`^(${IP_RANGES.map(re => re.source).join('|')})$`)
 
-module.exports = hostname => {
-  if (hostname.startsWith('[') && hostname.endsWith(']')) {
-    hostname = hostname.slice(1, -1)
+function extractMappedIPv4 (addr) {
+  // Cheap length guard: ::ffff:x:x is at least 10 chars
+  if (addr.length < 10 || addr.charCodeAt(1) !== 58) return null
+
+  // Very fast substring check (no regex yet)
+  if (addr[0] === ':' && addr.slice(0, 7).toLowerCase() === '::ffff:') {
+    // hex-mapped form? ::ffff:XXXX:YYYY or ::ffff:0:XXXX:YYYY
+    const m = /^::f{4}:(?:0:)?([0-9a-f]{1,4}):([0-9a-f]{1,4})$/i.exec(addr)
+    if (!m) return null
+
+    const hi = parseInt(m[1], 16)
+    const lo = parseInt(m[2], 16)
+
+    // Compose dotted IPv4 (avoids string concatenations)
+    return (
+      ((hi >> 8) & 0xff) +
+      '.' +
+      (hi & 0xff) +
+      '.' +
+      ((lo >> 8) & 0xff) +
+      '.' +
+      (lo & 0xff)
+    )
   }
-  return regex.test(hostname)
+
+  return null
+}
+
+module.exports = input => {
+  let host = input
+
+  const len = host.length
+  if (len > 2 && host[0] === '[' && host[len - 1] === ']') {
+    host = host.slice(1, -1)
+  }
+
+  const mappedIPv4 = extractMappedIPv4(host)
+  return mappedIPv4 ? ipv4(mappedIPv4) : regex.test(host)
 }
 
 module.exports.regex = regex
+module.exports.extractMappedIPv4 = extractMappedIPv4

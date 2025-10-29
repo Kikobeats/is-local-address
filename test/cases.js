@@ -5,9 +5,19 @@ const { isIP } = require('net')
 const IP_RANGES = [
   '::',
   '::1',
+  '[::1]',
+  '[::ffff:7f00:1]',
   '::ffff:0.0.0.0',
   '::ffff:192.168.255.254',
   '::ffff:255.255.255.255',
+  // IPv4-mapped IPv6 addresses in hexadecimal format
+  '::ffff:7f00:1', // 127.0.0.1
+  '::ffff:7f00:0', // 127.0.0.0
+  '::ffff:7fff:ffff', // 127.255.255.255
+  '::ffff:0:c0a8:1', // 192.168.0.1
+  '::ffff:0:a00:1', // 10.0.0.1
+  '::ffff:0:ac10:1', // 172.16.0.1
+  '::ffff:192.168.0.1', // 192.168.0.1
   '0.0.0.0',
   '0.0.0.1',
   '10.0.0.0',
@@ -70,6 +80,8 @@ const IP_RANGES = [
   '2002:c0a8:fffe:0000:0000:0000:0000:0000',
   '2002:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
   'fb00::',
+  'fe80::1',
+  'ff02::1',
   'fbff:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
   'fec0::',
   'localhost'

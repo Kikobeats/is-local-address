@@ -3,17 +3,17 @@
     "performance": [
       {
         "name": "is-local-address",
-        "duration": 1.56,
+        "duration": 2.06,
         "unit": "ms"
       },
       {
         "name": "ipaddr.js",
-        "duration": 2.59,
+        "duration": 2.4,
         "unit": "ms"
       },
       {
         "name": "private-ip",
-        "duration": 2.78,
+        "duration": 2.83,
         "unit": "ms"
       }
     ],
@@ -46,6 +46,16 @@
       "private-ip": true
     },
     {
+      "input": "[::1]",
+      "is-local-address": true,
+      "ipaddr.js": false
+    },
+    {
+      "input": "[::ffff:7f00:1]",
+      "is-local-address": true,
+      "ipaddr.js": false
+    },
+    {
       "input": "::ffff:0.0.0.0",
       "is-local-address": true,
       "ipaddr.js": true,
@@ -59,6 +69,48 @@
     },
     {
       "input": "::ffff:255.255.255.255",
+      "is-local-address": true,
+      "ipaddr.js": true,
+      "private-ip": true
+    },
+    {
+      "input": "::ffff:7f00:1",
+      "is-local-address": true,
+      "ipaddr.js": true,
+      "private-ip": false
+    },
+    {
+      "input": "::ffff:7f00:0",
+      "is-local-address": true,
+      "ipaddr.js": true,
+      "private-ip": false
+    },
+    {
+      "input": "::ffff:7fff:ffff",
+      "is-local-address": true,
+      "ipaddr.js": true,
+      "private-ip": false
+    },
+    {
+      "input": "::ffff:0:c0a8:1",
+      "is-local-address": true,
+      "ipaddr.js": true,
+      "private-ip": false
+    },
+    {
+      "input": "::ffff:0:a00:1",
+      "is-local-address": true,
+      "ipaddr.js": true,
+      "private-ip": false
+    },
+    {
+      "input": "::ffff:0:ac10:1",
+      "is-local-address": true,
+      "ipaddr.js": true,
+      "private-ip": false
+    },
+    {
+      "input": "::ffff:192.168.0.1",
       "is-local-address": true,
       "ipaddr.js": true,
       "private-ip": true
@@ -434,6 +486,18 @@
       "is-local-address": true,
       "ipaddr.js": false,
       "private-ip": false
+    },
+    {
+      "input": "fe80::1",
+      "is-local-address": true,
+      "ipaddr.js": true,
+      "private-ip": true
+    },
+    {
+      "input": "ff02::1",
+      "is-local-address": true,
+      "ipaddr.js": true,
+      "private-ip": true
     },
     {
       "input": "fbff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
