@@ -62,40 +62,6 @@ isLocalAddress(new URL('http://[::]:3000').hostname) // true
 isLocalAddress(new URL('https://127.0.0.1').hostname) // false
 ```
 
-## Supported Address Ranges
-
-The library correctly identifies all RFC-defined private and reserved IP ranges:
-
-**IPv4:**
-- Loopback: `127.0.0.0/8`
-- Private: `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`
-- Link-Local: `169.254.0.0/16`
-- Multicast: `224.0.0.0/4`
-- Reserved: `0.0.0.0/8`, `240.0.0.0/4`, `255.255.255.255/32`
-- Documentation: `192.0.2.0/24`, `198.51.100.0/24`, `203.0.113.0/24`
-- Carrier Grade NAT: `100.64.0.0/10`
-- 6to4: `2002::/16`
-- And more...
-
-**IPv6:**
-- Loopback: `::1/128`
-- Link-Local: `fe80::/10`
-- Unique Local: `fc00::/7`
-- Multicast: `ff00::/8`
-- Documentation: `2001:db8::/32`
-- And more...
-
-## Comparison
-
-| Aspect | is-local-address | ipaddr.js | private-ip |
-|--------|-----------------|-----------|-----------|
-| Bundle Size | 101B | 35.16KB | 45.65KB |
-| Performance | 1.26ms | 1.94ms | 2.26ms |
-| Accuracy | 100% | 96.88% | 87.50% |
-| Dependencies | 0 | 0 | 5 |
-| IPv6 Support | ✅ | ✅ | ✅ |
-| Bogon Support | ✅ | ✅ | ❌ |
-
 ## License
 
 **is-local-address** © [Kiko Beats](https://kikobeats.com), released under the [MIT](https://github.com/Kikobeats/is-local-address/blob/master/LICENSE.md) License.<br>
