@@ -1,5 +1,7 @@
 'use strict'
 
+const ipv4 = require('../ipv4')
+
 const IP_RANGES = [
   // Matches IPv4-mapped IPv6 addresses in dotted decimal format: ::ffff:192.168.0.1
   /^::f{4}:(?:0:)?([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/,
@@ -35,42 +37,45 @@ const IP_RANGES = [
 
 const regex = new RegExp(`^(${IP_RANGES.map(re => re.source).join('|')})$`)
 
-/**
- * Converts IPv4-mapped IPv6 addresses in hexadecimal format to dotted decimal.
- * Example: ::ffff:7f00:1 -> 127.0.0.1
- */
-function extractMappedIPv4 (ipv6Address) {
-  // Match IPv4-mapped IPv6 in hexadecimal format: ::ffff:XXXX:XXXX or ::ffff:0:XXXX:XXXX
-  const hexMatch = ipv6Address.match(
-    /^::f{4}:(?:0:)?([0-9a-fA-F]{1,4}):([0-9a-fA-F]{1,4})$/i
-  )
-  if (hexMatch) {
-    const firstHalf = parseInt(hexMatch[1], 16)
-    const secondHalf = parseInt(hexMatch[2], 16)
+function extractMappedIPv4 (addr) {
+  // Cheap length guard: ::ffff:x:x is at least 10 chars
+  if (addr.length < 10 || addr.charCodeAt(1) !== 58) return null
 
-    // Convert two 16-bit hex values to four 8-bit decimal values
-    const octet1 = (firstHalf >> 8) & 0xff
-    const octet2 = firstHalf & 0xff
-    const octet3 = (secondHalf >> 8) & 0xff
-    const octet4 = secondHalf & 0xff
+  // Very fast substring check (no regex yet)
+  if (addr[0] === ':' && addr.slice(0, 7).toLowerCase() === '::ffff:') {
+    // hex-mapped form? ::ffff:XXXX:YYYY or ::ffff:0:XXXX:YYYY
+    const m = /^::f{4}:(?:0:)?([0-9a-f]{1,4}):([0-9a-f]{1,4})$/i.exec(addr)
+    if (!m) return null
 
-    return `${octet1}.${octet2}.${octet3}.${octet4}`
+    const hi = parseInt(m[1], 16)
+    const lo = parseInt(m[2], 16)
+
+    // Compose dotted IPv4 (avoids string concatenations)
+    return (
+      ((hi >> 8) & 0xff) +
+      '.' +
+      (hi & 0xff) +
+      '.' +
+      ((lo >> 8) & 0xff) +
+      '.' +
+      (lo & 0xff)
+    )
   }
+
   return null
 }
 
-module.exports = hostname => {
-  if (hostname.startsWith('[') && hostname.endsWith(']')) {
-    hostname = hostname.slice(1, -1)
+module.exports = input => {
+  let host = input
+
+  const len = host.length
+  if (len > 2 && host[0] === '[' && host[len - 1] === ']') {
+    host = host.slice(1, -1)
   }
 
-  // Check if it's an IPv4-mapped IPv6 address in hexadecimal format
-  const mappedIPv4 = extractMappedIPv4(hostname)
-  if (mappedIPv4 !== null) {
-    return require('../ipv4')(mappedIPv4)
-  }
-
-  return regex.test(hostname)
+  const mappedIPv4 = extractMappedIPv4(host)
+  return mappedIPv4 ? ipv4(mappedIPv4) : regex.test(host)
 }
 
 module.exports.regex = regex
+module.exports.extractMappedIPv4 = extractMappedIPv4
