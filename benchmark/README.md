@@ -1,18 +1,10 @@
 # Benchmark
 
-| Name | Duration |
-|------|----------|
-| `is-local-address` | 1.26ms |
-| `ipaddr.js` | 1.94ms |
-| `private-ip` | 2.26ms |
-
-# Bundle Size
-
-| Name | Size |
-|------|------|
-| `is-local-address` | 101B |
-| `ipaddr.js` | 35.16KB |
-| `private-ip` | 45.65KB |
+| Name | Duration | Size |
+|------|----------|------|
+| `is-local-address` | 1.56ms | 101B |
+| `ipaddr.js` | 2.59ms (+66%) | 35.16KB (+35547%) |
+| `private-ip` | 2.78ms (+78%) | 45.65KB (+46183%) |
 
 # Comparison
 

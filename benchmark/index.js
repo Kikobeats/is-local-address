@@ -77,18 +77,29 @@ const createBench = cases => {
         { input }
       )
     )
+
+    const sizes = getSizeInfo()
+    const metrics = {
+      performance: results.map(({ name, duration }) => ({
+        name,
+        duration: parseFloat(duration.toFixed(2)),
+        unit: 'ms'
+      })),
+      bundleSize: results.map(({ name }) => ({
+        name,
+        size: sizes[name]
+      }))
+    }
+
+    const outputData = {
+      metrics,
+      results: output
+    }
+
     fs.writeFileSync(
       path.join(__dirname, 'output.json'),
-      JSON.stringify(output, null, 2)
+      JSON.stringify(outputData, null, 2)
     )
-
-    const durationTable = [
-      '| Name | Duration |',
-      '|------|----------|',
-      ...results.map(
-        ({ name, duration }) => `| ${escape(name)} | ${duration.toFixed(2)}ms |`
-      )
-    ].join('\n')
 
     const successRates = results.reduce((acc, { name, output }) => {
       const actual = output.filter((result, index) => {
@@ -123,24 +134,57 @@ const createBench = cases => {
       )
     ].join('\n')
 
-    const sizes = getSizeInfo()
-    const sizeTable = [
-      '| Name | Size |',
-      '|------|------|',
-      ...results.map(({ name }) => `| ${escape(name)} | ${sizes[name]} |`)
-    ].join('\n')
+    const metricsTable = (() => {
+      const baseline = results.find(r => r.name === 'is-local-address')
+      const baselineSize = sizes['is-local-address']
+
+      const parseSizeToBytes = sizeStr => {
+        const match = sizeStr.match(/^([\d.]+)(B|KB|MB)$/)
+        if (!match) return 0
+        const value = parseFloat(match[1])
+        const unit = match[2]
+        if (unit === 'KB') return value * 1024
+        if (unit === 'MB') return value * 1024 * 1024
+        return value
+      }
+
+      const baseSizeBytes = parseSizeToBytes(baselineSize)
+
+      const rows = ['| Name | Duration | Size |', '|------|----------|------|']
+
+      results.forEach(({ name, duration }) => {
+        const durationStr = duration.toFixed(2)
+        const sizeStr = sizes[name]
+        const sizeBytes = parseSizeToBytes(sizeStr)
+
+        let durationWithDelta = `${durationStr}ms`
+        let sizeWithDelta = sizeStr
+
+        if (name !== 'is-local-address') {
+          const slowerPercent = (
+            ((duration - baseline.duration) / baseline.duration) *
+            100
+          ).toFixed(0)
+          durationWithDelta = `${durationStr}ms (+${slowerPercent}%)`
+
+          const largerPercent = (
+            ((sizeBytes - baseSizeBytes) / baseSizeBytes) *
+            100
+          ).toFixed(0)
+          sizeWithDelta = `${sizeStr} (+${largerPercent}%)`
+        }
+
+        rows.push(
+          `| ${escape(name)} | ${durationWithDelta} | ${sizeWithDelta} |`
+        )
+      })
+
+      return rows.join('\n')
+    })()
 
     const markdown = `# Benchmark
 
-| Name | Duration |
-|------|----------|
-${results
-  .map(({ name, duration }) => `| ${escape(name)} | ${duration.toFixed(2)}ms |`)
-  .join('\n')}
-
-# Bundle Size
-
-${sizeTable}
+${metricsTable}
 
 # Comparison
 
