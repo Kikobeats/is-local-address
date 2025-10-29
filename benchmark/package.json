@@ -3,10 +3,12 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "echo \"export { default } from 'private-ip';\" | npx esbuild --bundle --target=ES2019 --format=cjs > private-ip.js"
+    "build": "echo \"export { default } from 'private-ip';\" | npx esbuild --bundle --target=ES2019 --format=cjs > private-ip.js",
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "esbuild": "~0.25.0",
+    "ipaddr.js": "~2.2.0",
     "private-ip": "~3.0.2"
   }
 }
