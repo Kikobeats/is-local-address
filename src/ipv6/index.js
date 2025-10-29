@@ -19,14 +19,12 @@ const IP_RANGES = [
   /^2001:db8:([0-9a-fA-F]{0,4}:){0,7}[0-9a-fA-F]{0,4}$/,
   // Matches IPv6 addresses in the 3fff::/20 range (documentation prefix)
   /^3fff:([0-9a-fA-F]{0,4}:){0,7}[0-9a-fA-F]{0,4}$/,
-  // Matches IPv6 addresses in the fc00::/7 range (ULA)
+  // Matches IPv6 addresses in the fc00::/7 range (ULA + optional legacy fb00)
   /^f[b-d][0-9a-fA-F]{2}:([0-9a-fA-F]{0,4}:){0,7}[0-9a-fA-F]{0,4}$/i,
   // Matches IPv6 addresses in the fe80::/10 range (link-local)
-  /^fe[8-9a-bA-B][0-9a-fA-F]:/i,
-  // Matches IPv6 multicast addresses
-  /^ff([0-9a-fA-F]{2,2}):/i,
-  // Matches IPv6 addresses in the ff00::/8 range (Multicast)
-  /^ff00:([0-9a-fA-F]{0,4}:){0,7}[0-9a-fA-F]{0,4}$/,
+  /^fe[89ab][0-9a-fA-F]:(?:[0-9a-fA-F]{0,4}:){0,6}[0-9a-fA-F]{0,4}$/i,
+  // Matches IPv6 multicast addresses in ff00::/8
+  /^ff[0-9a-fA-F]{2}:(?:[0-9a-fA-F]{0,4}:){0,6}[0-9a-fA-F]{0,4}$/i,
   // Matches localhost in IPv6
   /^::1?$/,
   // Matches IPv6 addresses in the fec0::/10 range (Site-local unicast)

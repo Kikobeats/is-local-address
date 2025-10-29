@@ -80,6 +80,8 @@ const IP_RANGES = [
   '2002:c0a8:fffe:0000:0000:0000:0000:0000',
   '2002:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
   'fb00::',
+  'fe80::1',
+  'ff02::1',
   'fbff:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
   'fec0::',
   'localhost'
