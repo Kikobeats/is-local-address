@@ -12,6 +12,29 @@ const escape = value => `\`${value}\``
 
 const ips = internalIPs.concat(externalIPs).map(({ ip }) => ip)
 
+const getPackageSize = packagePath => {
+  try {
+    const stats = fs.statSync(packagePath)
+    const bytes = stats.size
+    if (bytes < 1024) return `${bytes}B`
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(2)}KB`
+    return `${(bytes / 1024 / 1024).toFixed(2)}MB`
+  } catch {
+    return 'N/A'
+  }
+}
+
+const getSizeInfo = () => {
+  const sizes = {
+    'is-local-address': getPackageSize(path.join(__dirname, '../src/index.js')),
+    'ipaddr.js': getPackageSize(
+      path.join(__dirname, 'node_modules/ipaddr.js/lib/ipaddr.js')
+    ),
+    'private-ip': getPackageSize(path.join(__dirname, 'private-ip.js'))
+  }
+  return sizes
+}
+
 function isPrivateIpAddr (ip) {
   if (ip === 'localhost') {
     return true
@@ -100,6 +123,13 @@ const createBench = cases => {
       )
     ].join('\n')
 
+    const sizes = getSizeInfo()
+    const sizeTable = [
+      '| Name | Size |',
+      '|------|------|',
+      ...results.map(({ name }) => `| ${escape(name)} | ${sizes[name]} |`)
+    ].join('\n')
+
     const markdown = `# Benchmark
 
 | Name | Duration |
@@ -107,6 +137,10 @@ const createBench = cases => {
 ${results
   .map(({ name, duration }) => `| ${escape(name)} | ${duration.toFixed(2)}ms |`)
   .join('\n')}
+
+# Bundle Size
+
+${sizeTable}
 
 # Comparison
 
