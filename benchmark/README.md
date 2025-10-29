@@ -4,9 +4,9 @@
 
     | Name | Duration |
 |------|----------|
-| `is-local-address` | 2.02ms |
-| `ipaddr.js` | 2.42ms |
-| `private-ip` | 3.23ms |
+| `is-local-address` | 1.59ms |
+| `ipaddr.js` | 2.36ms |
+| `private-ip` | 2.82ms |
 
     # Comparsion
 

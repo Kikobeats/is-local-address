@@ -12,19 +12,19 @@ const escape = value => `\`${value}\``
 
 const ips = internalIPs.concat(externalIPs).map(({ ip }) => ip)
 
-function isPrivateIpAddr(ip) {
+function isPrivateIpAddr (ip) {
   if (ip === 'localhost') {
-    return true;
+    return true
   }
   if (!ipaddr.isValid(ip)) {
-    return false;
+    return false
   }
-  let addr = ipaddr.parse(ip);
+  let addr = ipaddr.parse(ip)
   if (addr.kind() === 'ipv6' && addr.isIPv4MappedAddress()) {
-    addr = addr.toIPv4Address();
+    addr = addr.toIPv4Address()
   }
-  const range = addr.range();
-  return range !== 'unicast';
+  const range = addr.range()
+  return range !== 'unicast'
 }
 
 const createBench = cases => {
@@ -123,4 +123,3 @@ createBench(ips)
   .add('ipaddr.js', isPrivateIpAddr)
   .add('private-ip', require('./private-ip').default)
   .run()
-
