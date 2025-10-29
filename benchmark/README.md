@@ -1,16 +1,14 @@
+# Benchmark
 
-
-    # Benchmark
-
-    | Name | Duration |
+| Name | Duration |
 |------|----------|
-| `is-local-address` | 1.59ms |
-| `ipaddr.js` | 2.36ms |
-| `private-ip` | 2.82ms |
+| `is-local-address` | 1.31ms |
+| `ipaddr.js` | 1.96ms |
+| `private-ip` | 2.17ms |
 
-    # Comparsion
+# Comparison
 
-    | Input | Expected | `is-local-address` (100.00%) | `ipaddr.js` (96.88%) | `private-ip` (87.50%) |
+| Input | Expected | `is-local-address` (100.00%) | `ipaddr.js` (96.88%) | `private-ip` (87.50%) |
 |-------|----------|-------|-------|-------|
 | :: | ✅ | ✅ | ✅ | ✅ |
 | ::1 | ✅ | ✅ | ✅ | ✅ |

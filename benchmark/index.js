@@ -100,15 +100,17 @@ const createBench = cases => {
       )
     ].join('\n')
 
-    const markdown = `
+    const markdown = `# Benchmark
 
-    # Benchmark
+| Name | Duration |
+|------|----------|
+${results
+  .map(({ name, duration }) => `| ${escape(name)} | ${duration.toFixed(2)}ms |`)
+  .join('\n')}
 
-    ${durationTable}
+# Comparison
 
-    # Comparsion
-
-    ${inputTable}
+${inputTable}
 `
     fs.writeFileSync(path.join(__dirname, 'README.md'), markdown)
   }
