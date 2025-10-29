@@ -2,19 +2,28 @@
 
 | Name | Duration | Size |
 |------|----------|------|
-| `is-local-address` | 1.56ms | 101B |
-| `ipaddr.js` | 2.59ms (+66%) | 35.16KB (+35547%) |
-| `private-ip` | 2.78ms (+78%) | 45.65KB (+46183%) |
+| `is-local-address` | 2.06ms | 101B |
+| `ipaddr.js` | 2.40ms (+16%) | 35.16KB (+35547%) |
+| `private-ip` | 2.83ms (+37%) | 45.65KB (+46183%) |
 
 # Comparison
 
-| Input | Expected | `is-local-address` (100.00%) | `ipaddr.js` (96.88%) | `private-ip` (87.50%) |
+| Input | Expected | `is-local-address` (100.00%) | `ipaddr.js` (95.33%) | `private-ip` (81.31%) |
 |-------|----------|-------|-------|-------|
 | :: | ✅ | ✅ | ✅ | ✅ |
 | ::1 | ✅ | ✅ | ✅ | ✅ |
+| [::1] | ✅ | ✅ | ❌ | `undefined` |
+| [::ffff:7f00:1] | ✅ | ✅ | ❌ | `undefined` |
 | ::ffff:0.0.0.0 | ✅ | ✅ | ✅ | ✅ |
 | ::ffff:192.168.255.254 | ✅ | ✅ | ✅ | ✅ |
 | ::ffff:255.255.255.255 | ✅ | ✅ | ✅ | ✅ |
+| ::ffff:7f00:1 | ✅ | ✅ | ✅ | ❌ |
+| ::ffff:7f00:0 | ✅ | ✅ | ✅ | ❌ |
+| ::ffff:7fff:ffff | ✅ | ✅ | ✅ | ❌ |
+| ::ffff:0:c0a8:1 | ✅ | ✅ | ✅ | ❌ |
+| ::ffff:0:a00:1 | ✅ | ✅ | ✅ | ❌ |
+| ::ffff:0:ac10:1 | ✅ | ✅ | ✅ | ❌ |
+| ::ffff:192.168.0.1 | ✅ | ✅ | ✅ | ✅ |
 | 0.0.0.0 | ✅ | ✅ | ✅ | ✅ |
 | 0.0.0.1 | ✅ | ✅ | ✅ | ✅ |
 | 10.0.0.0 | ✅ | ✅ | ✅ | ✅ |
@@ -77,6 +86,8 @@
 | 2002:c0a8:fffe:0000:0000:0000:0000:0000 | ✅ | ✅ | ✅ | ✅ |
 | 2002:ffff:ffff:ffff:ffff:ffff:ffff:ffff | ✅ | ✅ | ✅ | ✅ |
 | fb00:: | ✅ | ✅ | ❌ | ❌ |
+| fe80::1 | ✅ | ✅ | ✅ | ✅ |
+| ff02::1 | ✅ | ✅ | ✅ | ✅ |
 | fbff:ffff:ffff:ffff:ffff:ffff:ffff:ffff | ✅ | ✅ | ❌ | ❌ |
 | fec0:: | ✅ | ✅ | ❌ | ❌ |
 | localhost | ✅ | ✅ | ✅ | `undefined` |
