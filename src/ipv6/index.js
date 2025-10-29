@@ -1,8 +1,8 @@
 'use strict'
 
 const IP_RANGES = [
-  // Matches IPv4-mapped, IPv4-translated, and IPv4-embedded IPv6 addresses
-  /^::f{4}:0?([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/,
+  // Matches IPv4-mapped IPv6 addresses in dotted decimal format: ::ffff:192.168.0.1
+  /^::f{4}:(?:0:)?([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/,
   // Matches IPv6 addresses in the 64:ff9b::/96 range
   /^64:ff9b::([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/,
   // Matches IPv6 addresses in the 100::/64 range
@@ -35,10 +35,41 @@ const IP_RANGES = [
 
 const regex = new RegExp(`^(${IP_RANGES.map(re => re.source).join('|')})$`)
 
+/**
+ * Converts IPv4-mapped IPv6 addresses in hexadecimal format to dotted decimal.
+ * Example: ::ffff:7f00:1 -> 127.0.0.1
+ */
+function extractMappedIPv4 (ipv6Address) {
+  // Match IPv4-mapped IPv6 in hexadecimal format: ::ffff:XXXX:XXXX or ::ffff:0:XXXX:XXXX
+  const hexMatch = ipv6Address.match(
+    /^::f{4}:(?:0:)?([0-9a-fA-F]{1,4}):([0-9a-fA-F]{1,4})$/i
+  )
+  if (hexMatch) {
+    const firstHalf = parseInt(hexMatch[1], 16)
+    const secondHalf = parseInt(hexMatch[2], 16)
+
+    // Convert two 16-bit hex values to four 8-bit decimal values
+    const octet1 = (firstHalf >> 8) & 0xff
+    const octet2 = firstHalf & 0xff
+    const octet3 = (secondHalf >> 8) & 0xff
+    const octet4 = secondHalf & 0xff
+
+    return `${octet1}.${octet2}.${octet3}.${octet4}`
+  }
+  return null
+}
+
 module.exports = hostname => {
   if (hostname.startsWith('[') && hostname.endsWith(']')) {
     hostname = hostname.slice(1, -1)
   }
+
+  // Check if it's an IPv4-mapped IPv6 address in hexadecimal format
+  const mappedIPv4 = extractMappedIPv4(hostname)
+  if (mappedIPv4 !== null) {
+    return require('../ipv4')(mappedIPv4)
+  }
+
   return regex.test(hostname)
 }
 
