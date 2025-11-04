@@ -39,6 +39,9 @@ function isPrivateIpAddr (ip) {
   if (ip === 'localhost') {
     return true
   }
+  if (ip.startsWith('[') && ip.endsWith(']')) {
+    ip = ip.slice(1, -1)
+  }
   if (!ipaddr.isValid(ip)) {
     return false
   }
