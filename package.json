@@ -2,7 +2,7 @@
   "name": "is-local-address",
   "description": "Static check if a hostname is a local IP address.",
   "homepage": "https://github.com/Kikobeats/is-local-address",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "types": "src/index.d.ts",
   "exports": {
     ".": "./src/index.js",
