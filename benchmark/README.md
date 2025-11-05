@@ -2,18 +2,18 @@
 
 | Name | Duration | Size |
 |------|----------|------|
-| `is-local-address` | 2.06ms | 101B |
-| `ipaddr.js` | 2.40ms (+16%) | 35.16KB (+35547%) |
-| `private-ip` | 2.83ms (+37%) | 45.65KB (+46183%) |
+| `is-local-address` | 2.18ms | 101B |
+| `ipaddr.js` | 2.31ms (+6%) | 35.16KB (+35547%) |
+| `private-ip` | 2.72ms (+25%) | 45.65KB (+46183%) |
 
 # Comparison
 
-| Input | Expected | `is-local-address` (100.00%) | `ipaddr.js` (95.33%) | `private-ip` (81.31%) |
+| Input | Expected | `is-local-address` (100.00%) | `ipaddr.js` (97.20%) | `private-ip` (81.31%) |
 |-------|----------|-------|-------|-------|
 | :: | ✅ | ✅ | ✅ | ✅ |
 | ::1 | ✅ | ✅ | ✅ | ✅ |
-| [::1] | ✅ | ✅ | ❌ | `undefined` |
-| [::ffff:7f00:1] | ✅ | ✅ | ❌ | `undefined` |
+| [::1] | ✅ | ✅ | ✅ | `undefined` |
+| [::ffff:7f00:1] | ✅ | ✅ | ✅ | `undefined` |
 | ::ffff:0.0.0.0 | ✅ | ✅ | ✅ | ✅ |
 | ::ffff:192.168.255.254 | ✅ | ✅ | ✅ | ✅ |
 | ::ffff:255.255.255.255 | ✅ | ✅ | ✅ | ✅ |

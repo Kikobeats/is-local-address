@@ -3,17 +3,17 @@
     "performance": [
       {
         "name": "is-local-address",
-        "duration": 2.06,
+        "duration": 2.18,
         "unit": "ms"
       },
       {
         "name": "ipaddr.js",
-        "duration": 2.4,
+        "duration": 2.31,
         "unit": "ms"
       },
       {
         "name": "private-ip",
-        "duration": 2.83,
+        "duration": 2.72,
         "unit": "ms"
       }
     ],
@@ -48,12 +48,12 @@
     {
       "input": "[::1]",
       "is-local-address": true,
-      "ipaddr.js": false
+      "ipaddr.js": true
     },
     {
       "input": "[::ffff:7f00:1]",
       "is-local-address": true,
-      "ipaddr.js": false
+      "ipaddr.js": true
     },
     {
       "input": "::ffff:0.0.0.0",
