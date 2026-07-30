@@ -1,6 +1,6 @@
 {
   "name": "is-local-address",
-  "description": "Static check if a hostname is a local IP address.",
+  "description": "Statically check whether a hostname or IP is a local, loopback, private, or link-local address.",
   "homepage": "https://github.com/Kikobeats/is-local-address",
   "version": "2.3.4",
   "types": "src/index.d.ts",
@@ -33,15 +33,19 @@
   },
   "keywords": [
     "check",
-    "is",
+    "hostname",
+    "ip",
+    "local",
     "localhost",
-    "uri",
-    "url"
+    "loopback",
+    "private-ip",
+    "security",
+    "ssrf",
+    "uri"
   ],
   "devDependencies": {
     "@commitlint/cli": "latest",
     "@commitlint/config-conventional": "latest",
-    "@ksmithut/prettier-standard": "latest",
     "ava": "latest",
     "c8": "latest",
     "ci-publish": "latest",
@@ -95,7 +99,7 @@
   },
   "nano-staged": {
     "*.js": [
-      "prettier-standard",
+      "npx @kikobeats/prettier-standard",
       "standard --fix"
     ],
     "package.json": [
