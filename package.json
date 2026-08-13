@@ -2,7 +2,7 @@
   "name": "is-local-address",
   "description": "Statically check whether a hostname or IP is a local, loopback, private, or link-local address.",
   "homepage": "https://github.com/Kikobeats/is-local-address",
-  "version": "2.3.5",
+  "version": "2.3.6",
   "types": "src/index.d.ts",
   "exports": {
     ".": "./src/index.js",

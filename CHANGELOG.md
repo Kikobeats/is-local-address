@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.3.6 (2026-08-13)
+
+
+### Bug Fixes
+
+* treat RFC 6761 localhost names as local ([#27](https://github.com/Kikobeats/is-local-address/issues/27)) ([3826647](https://github.com/Kikobeats/is-local-address/commit/3826647cd72821a7ec5b950d8b7cf94336924b40))
+
 ### 2.3.5 (2026-08-13)
 
 ### 2.3.4 (2026-04-13)
