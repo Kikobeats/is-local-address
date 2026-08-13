@@ -1,6 +1,6 @@
 'use strict'
 
-const test = require('ava')
+const test = require('ava').default
 const { extractMappedIPv4 } = require('../src/ipv6')
 
 test('extracts valid hex-mapped IPv4 addresses - loopback', t => {
