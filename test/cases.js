@@ -84,7 +84,12 @@ const IP_RANGES = [
   'ff02::1',
   'fbff:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
   'fec0::',
-  'localhost'
+  'localhost',
+  'localhost.',
+  'foo.localhost',
+  'zzq7x4random.localhost',
+  'localhost.localdomain',
+  'LOCALHOST'
 ]
 
 const internalIPs = IP_RANGES.map(ip => ({ type: isIP(ip), ip }))
@@ -115,7 +120,10 @@ const externalIPs = [
   '2001:db7:ffff:ffff:ffff:ffff:ffff:ffff',
   '2001:db9::',
   'example.com:80',
-  'example.com'
+  'example.com',
+  'localhost.com',
+  'notlocalhost',
+  'example.localhost.com'
 ].map(ip => ({ type: isIP(ip), ip }))
 
 module.exports = {
@@ -123,7 +131,9 @@ module.exports = {
   internalIPs,
   externalIPs,
   externalIpv4s: externalIPs.filter(({ type }) => type === 4 || type === 0),
-  internalIPv4s: internalIPs.filter(({ type }) => type === 4),
+  internalIPv4s: internalIPs.filter(
+    ({ ip, type }) => type === 4 || (type === 0 && !ip.includes('::'))
+  ),
   internalIPv6s: internalIPs.filter(
     ({ ip, type }) => type === 6 || (type === 0 && ip.includes('::'))
   )

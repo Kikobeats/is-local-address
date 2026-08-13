@@ -29,5 +29,14 @@ const IP_RANGES = [
 
 const regex = new RegExp(`^(${IP_RANGES.join('|')})$`)
 
-module.exports = regex.test.bind(regex)
+const isLocalAddress = hostname => {
+  const host = String(hostname).toLowerCase().replace(/\.$/, '')
+  return (
+    host.endsWith('.localhost') ||
+    host === 'localhost.localdomain' ||
+    regex.test(host)
+  )
+}
+
+module.exports = isLocalAddress
 module.exports.regex = regex

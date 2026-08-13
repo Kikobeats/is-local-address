@@ -18,7 +18,7 @@ const { externalIPs, internalIPs } = require('../test/cases')
 
   // validate internal IPs
   for (const [index, { ip }] of internalIPs
-    .filter(({ ip }) => ip !== 'localhost')
+    .filter(({ ip }) => !/localhost/i.test(ip))
     .entries()) {
     const payload = await ipinfo(ip)
     if (!payload.bogon) {
