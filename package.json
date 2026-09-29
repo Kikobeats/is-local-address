@@ -7,7 +7,8 @@
   "exports": {
     ".": "./src/index.js",
     "./ipv4": "./src/ipv4/index.js",
-    "./ipv6": "./src/ipv6/index.js"
+    "./ipv6": "./src/ipv6/index.js",
+    "./site-scoped": "./src/site-scoped/index.js"
   },
   "author": {
     "email": "josefrancisco.verdu@gmail.com",

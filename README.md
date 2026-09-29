@@ -62,6 +62,25 @@ isLocalAddress(new URL('http://[::]:3000').hostname) // true
 isLocalAddress(new URL('https://127.0.0.1').hostname) // false
 ```
 
+## Site scope
+
+The default export answers "is this address non-public", which is the question an SSRF guard asks, so it includes every bogon range. Some of those ranges are held by hosts outside your own network: RFC 6598 shared address space (`100.64.0.0/10`, carrier-grade NAT) is shared with every other subscriber of the same provider, and Teredo (`2001::/32`), 6to4 (`2002::/16`) and NAT64 (`64:ff9b::/96`) embed public IPv4 addresses.
+
+When the question is "is this address inside one administrative network", for example before reflecting a CORS origin, use the site-scoped export. It drops those four ranges and keeps the rest: loopback, RFC 1918, ULA, link-local, documentation and benchmarking prefixes, and the multicast and reserved blocks, which are kept whole because none of them can be a unicast origin.
+
+```js
+const isSiteScoped = require('is-local-address/site-scoped')
+
+isSiteScoped('192.168.1.20') // true
+isSiteScoped('100.64.0.1') // false, RFC 6598 shared space
+isSiteScoped(new URL('http://[2002:808:808::1]').hostname) // false, 6to4
+
+isSiteScoped.ipv4('10.0.0.1') // IPv4 only
+isSiteScoped.ipv6('fe80::1') // IPv6 only
+```
+
+IPv4-mapped addresses classify by their embedded IPv4 in both the hex form (`::ffff:c0a8:1`, which is what `new URL()` produces) and the dotted form (`::ffff:192.168.0.1`).
+
 ## License
 
 **is-local-address** © [Kiko Beats](https://kikobeats.com), released under the [MIT](https://github.com/Kikobeats/is-local-address/blob/master/LICENSE.md) License.<br>
