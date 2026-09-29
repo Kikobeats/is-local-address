@@ -9,8 +9,12 @@ const IP_RANGES = [
   /^64:ff9b::([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/,
   // Matches IPv6 addresses in the 100::/64 range
   /^100:(:[0-9a-fA-F]{0,4}){0,6}$/,
-  // Matches IPv6 addresses in the 2001::/32 range
+  // Matches IPv6 addresses in the 2001::/32 range (Teredo)
+  // Both the compressed form (2001::…) and the form with an explicit zero
+  // second hextet (2001:0:…), which real Teredo addresses take because the
+  // server IPv4 that follows is non-zero and prevents compression there.
   /^2001:(:[0-9a-fA-F]{0,4}){0,6}$/,
+  /^2001:0{1,4}:([0-9a-fA-F]{0,4}:){0,6}[0-9a-fA-F]{0,4}$/,
   // Matches IPv6 addresses in the 2001:10::/28 range (ORCHID)
   /^2001:1[0-9a-fA-F]:([0-9a-fA-F]{0,4}:){0,7}[0-9a-fA-F]{0,4}$/,
   // Matches IPv6 addresses in the 2001:2::/28 range
