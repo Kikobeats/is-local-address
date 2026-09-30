@@ -1,7 +1,9 @@
 'use strict'
 
+const { buildSync } = require('esbuild')
 const fs = require('fs')
 const path = require('path')
+const zlib = require('zlib')
 const ipaddr = require('ipaddr.js')
 const { internalIPs, externalIPs } = require('../test/cases')
 
@@ -12,28 +14,31 @@ const escape = value => `\`${value}\``
 
 const ips = internalIPs.concat(externalIPs).map(({ ip }) => ip)
 
-const getPackageSize = packagePath => {
-  try {
-    const stats = fs.statSync(packagePath)
-    const bytes = stats.size
-    if (bytes < 1024) return `${bytes}B`
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(2)}KB`
-    return `${(bytes / 1024 / 1024).toFixed(2)}MB`
-  } catch {
-    return 'N/A'
-  }
+const formatBytes = bytes => {
+  if (bytes < 1024) return `${bytes}B`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(2)}KB`
+  return `${(bytes / 1024 / 1024).toFixed(2)}MB`
 }
 
-const getSizeInfo = () => {
-  const sizes = {
-    'is-local-address': getPackageSize(path.join(__dirname, '../src/index.js')),
-    'ipaddr.js': getPackageSize(
-      path.join(__dirname, 'node_modules/ipaddr.js/lib/ipaddr.js')
-    ),
-    'private-ip': getPackageSize(path.join(__dirname, 'private-ip.js'))
-  }
-  return sizes
+const getBundleSize = entryPoint => {
+  const {
+    outputFiles: [bundle]
+  } = buildSync({
+    entryPoints: [entryPoint],
+    bundle: true,
+    minify: true,
+    format: 'esm',
+    platform: 'browser',
+    write: false
+  })
+  return formatBytes(zlib.gzipSync(bundle.contents, { level: 9 }).length)
 }
+
+const getSizeInfo = () => ({
+  'is-local-address': getBundleSize(path.join(__dirname, '../src/index.js')),
+  'ipaddr.js': getBundleSize(require.resolve('ipaddr.js')),
+  'private-ip': getBundleSize(path.join(__dirname, 'private-ip.js'))
+})
 
 function isPrivateIpAddr (ip) {
   if (ip === 'localhost') {
@@ -153,7 +158,7 @@ const createBench = cases => {
 
       const baseSizeBytes = parseSizeToBytes(baselineSize)
 
-      const rows = ['| Name | Duration | Size |', '|------|----------|------|']
+      const rows = ['| Name | Duration | Size (min+gzip) |', '|------|----------|------|']
 
       results.forEach(({ name, duration }) => {
         const durationStr = duration.toFixed(2)

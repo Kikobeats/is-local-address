@@ -3,32 +3,32 @@
     "performance": [
       {
         "name": "is-local-address",
-        "duration": 2.18,
+        "duration": 0.71,
         "unit": "ms"
       },
       {
         "name": "ipaddr.js",
-        "duration": 2.31,
+        "duration": 2.39,
         "unit": "ms"
       },
       {
         "name": "private-ip",
-        "duration": 2.72,
+        "duration": 2.11,
         "unit": "ms"
       }
     ],
     "bundleSize": [
       {
         "name": "is-local-address",
-        "size": "101B"
+        "size": "961B"
       },
       {
         "name": "ipaddr.js",
-        "size": "35.16KB"
+        "size": "3.70KB"
       },
       {
         "name": "private-ip",
-        "size": "45.65KB"
+        "size": "6.72KB"
       }
     ]
   },
@@ -380,6 +380,30 @@
       "private-ip": true
     },
     {
+      "input": "2001:0:4136:e378:8000:63bf:3fff:fdd2",
+      "is-local-address": true,
+      "ipaddr.js": true,
+      "private-ip": false
+    },
+    {
+      "input": "2001:0000:4136:e378:8000:63bf:3fff:fdd2",
+      "is-local-address": true,
+      "ipaddr.js": true,
+      "private-ip": false
+    },
+    {
+      "input": "2001:0:0:1::",
+      "is-local-address": true,
+      "ipaddr.js": true,
+      "private-ip": false
+    },
+    {
+      "input": "2001:0:ffff:ffff:ffff:ffff:ffff:ffff",
+      "is-local-address": true,
+      "ipaddr.js": true,
+      "private-ip": false
+    },
+    {
       "input": "2001:1f:ffff:ffff:ffff:ffff:ffff:ffff",
       "is-local-address": true,
       "ipaddr.js": true,
@@ -517,6 +541,31 @@
       "ipaddr.js": true
     },
     {
+      "input": "localhost.",
+      "is-local-address": true,
+      "ipaddr.js": false
+    },
+    {
+      "input": "foo.localhost",
+      "is-local-address": true,
+      "ipaddr.js": false
+    },
+    {
+      "input": "zzq7x4random.localhost",
+      "is-local-address": true,
+      "ipaddr.js": false
+    },
+    {
+      "input": "localhost.localdomain",
+      "is-local-address": true,
+      "ipaddr.js": false
+    },
+    {
+      "input": "LOCALHOST",
+      "is-local-address": true,
+      "ipaddr.js": false
+    },
+    {
       "input": "::1fff:0:0.0.0.0",
       "is-local-address": false,
       "ipaddr.js": false,
@@ -643,6 +692,12 @@
       "private-ip": false
     },
     {
+      "input": "2001:200::",
+      "is-local-address": false,
+      "ipaddr.js": false,
+      "private-ip": false
+    },
+    {
       "input": "2001:db7::",
       "is-local-address": false,
       "ipaddr.js": false,
@@ -667,6 +722,21 @@
     },
     {
       "input": "example.com",
+      "is-local-address": false,
+      "ipaddr.js": false
+    },
+    {
+      "input": "localhost.com",
+      "is-local-address": false,
+      "ipaddr.js": false
+    },
+    {
+      "input": "notlocalhost",
+      "is-local-address": false,
+      "ipaddr.js": false
+    },
+    {
+      "input": "example.localhost.com",
       "is-local-address": false,
       "ipaddr.js": false
     }
