@@ -2,7 +2,7 @@
 
 const {
   toHostnameString,
-  toResolvedHostname
+  resolverSpellings
 } = require('../resolver-spelling')
 
 module.exports = (ranges, { ambiguousIsLocal = false } = {}) => {
@@ -17,8 +17,9 @@ module.exports = (ranges, { ambiguousIsLocal = false } = {}) => {
     const host = toHostnameString(hostname).toLowerCase().replace(/\.$/, '')
     if (isLocalHost(host)) return true
     if (!ambiguousIsLocal) return false
-    const resolved = toResolvedHostname(host)
-    return resolved !== null && isLocalHost(resolved.replace(/\.$/, ''))
+    return resolverSpellings(host).some(spelling =>
+      isLocalHost(spelling.replace(/\.$/, ''))
+    )
   }
 
   isLocalAddress.regex = regex

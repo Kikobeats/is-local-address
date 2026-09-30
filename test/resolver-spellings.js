@@ -28,9 +28,25 @@ const loopbackSpellings = [
   'localhost\u00ad'
 ]
 
-const privateSpellings = ['0xa.1', '167772161', '0xc0.0xa8.0.1', '192.168.1']
+const macOSLoopbackSpellings = [
+  '0127.0.0.1',
+  '00127.00.00.01',
+  '0000000127.0.0.1',
+  '6425673729',
+  '0x17f000001',
+  '0x1ffffffff7f000001',
+  '0x100000000',
+  '077777777777',
+  '0127.0.0.1\u0000.evil.com'
+]
+
+const privateSpellings = ['0xa.1', '167772161', '0xc0.0xa8.0.1', '192.168.1', '010.0.0.1', '0192.168.0.1', '192.0168.0.01', '0172.016.0.1', '0169.0254.1.1']
 
 const loopbackIPv6Spellings = [
+  '[::1]\\',
+  '[::1]:80',
+  '[::1]/x',
+  '[fe80::1]#x',
   '::\uff11',
   '\uff1a\uff1a1',
   '::1\u00ad',
@@ -44,7 +60,7 @@ const loopbackIPv6Spellings = [
   '[::1] '
 ]
 
-for (const host of loopbackSpellings.concat(privateSpellings)) {
+for (const host of loopbackSpellings.concat(macOSLoopbackSpellings, privateSpellings)) {
   test(`SSRF guard resolves a local IPv4, site scope does not trust the spelling » ${JSON.stringify(host)}`, t => {
     t.true(isLocalAddress(host), host)
     t.true(isLocalIPv4(host), host)
@@ -79,7 +95,10 @@ test('public addresses stay public in every spelling', t => {
     'localhost.evil.com',
     '8.8.8.8 ',
     'example.com ',
-    '09.0.0.1'
+    '09.0.0.1',
+    '08.0.0.1',
+    '0256.0.0.1',
+    '99999999999999999999'
   ]) {
     t.false(isLocalAddress(host), host)
     t.false(isSiteScoped(host), host)
