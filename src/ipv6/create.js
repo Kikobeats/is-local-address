@@ -11,8 +11,8 @@ function extractMappedIPv4 (addr) {
   return (hi >> 8) + '.' + (hi & 0xff) + '.' + (lo >> 8) + '.' + (lo & 0xff)
 }
 
-module.exports = (ranges, ipv4) => {
-  const regex = new RegExp(`^(${ranges.join('|')})$`)
+module.exports = (ranges, ipv4, toMappedIPv4 = extractMappedIPv4) => {
+  const regex = new RegExp(`^(${ranges.join('|')})$`, 'i')
 
   const isLocalAddress = input => {
     let host = input
@@ -22,7 +22,7 @@ module.exports = (ranges, ipv4) => {
       host = host.slice(1, -1)
     }
 
-    const mappedIPv4 = extractMappedIPv4(host)
+    const mappedIPv4 = toMappedIPv4(host)
     return mappedIPv4 ? ipv4(mappedIPv4) : regex.test(host)
   }
 

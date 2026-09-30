@@ -50,6 +50,19 @@ test('IPv4-mapped addresses classify by the embedded IPv4 in both spellings', t 
   t.false(isSiteScoped('::ffff:8.8.8.8'), 'dotted 8.8.8.8')
 })
 
+test('IPv6 hex digits are case-insensitive', t => {
+  for (const { ip } of inSite) t.true(isSiteScoped(ip.toUpperCase()), ip)
+  for (const { ip } of beyondSite) t.false(isSiteScoped(ip.toUpperCase()), ip)
+})
+
+test('strips one bracket pair only', t => {
+  t.true(isSiteScoped('[::1]'))
+  t.false(isSiteScoped('[[::1]]'))
+  t.false(isSiteScoped('[[fe80::1]]'))
+  t.false(isSiteScoped('[[::ffff:c0a8:1]]'))
+  t.false(isSiteScoped.ipv6('[[::1]]'))
+})
+
 test('exposes per-family matchers', t => {
   t.true(isSiteScoped.ipv4('10.0.0.1'))
   t.false(isSiteScoped.ipv4('100.64.0.1'))
