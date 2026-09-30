@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.4.3 (2026-09-30)
+
+
+### Bug Fixes
+
+* **ipv6:** canonicalize before matching, classify embedded IPv4 ([#34](https://github.com/Kikobeats/is-local-address/issues/34)) ([8b8ef56](https://github.com/Kikobeats/is-local-address/commit/8b8ef56406a69008cd2a431dd81e59c616592b6b)), closes [#29](https://github.com/Kikobeats/is-local-address/issues/29) [#30](https://github.com/Kikobeats/is-local-address/issues/30)
+
 ### 2.4.2 (2026-09-30)
 
 
