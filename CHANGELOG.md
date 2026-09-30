@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.4.4 (2026-09-30)
+
+
+### Bug Fixes
+
+* align ranges with the IANA special-purpose registries ([#36](https://github.com/Kikobeats/is-local-address/issues/36)) ([569158a](https://github.com/Kikobeats/is-local-address/commit/569158af4a262dd5e7584fd9f61d2ed0c7d65688))
+
 ### 2.4.3 (2026-09-30)
 
 
