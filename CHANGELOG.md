@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.3.7 (2026-09-30)
+
+
+### Bug Fixes
+
+* match Teredo addresses with an explicit zero second hextet ([#28](https://github.com/Kikobeats/is-local-address/issues/28)) ([af176bd](https://github.com/Kikobeats/is-local-address/commit/af176bd9d8be68a0507e9ded49b9e2f0113a44aa))
+
 ### 2.3.6 (2026-08-13)
 
 
