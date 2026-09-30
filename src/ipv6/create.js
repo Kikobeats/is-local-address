@@ -1,5 +1,10 @@
 'use strict'
 
+const {
+  toHostnameString,
+  toResolvedIPv6
+} = require('../resolver-spelling')
+
 const MAPPED_HEX = /^::f{4}:(?:0:)?([0-9a-f]{1,4}):([0-9a-f]{1,4})$/i
 const NAT64_HEX = /^64:ff9b::(?:([0-9a-f]{1,4}):)?([0-9a-f]{1,4})?$/
 const IPV6_CHARACTERS = /^[0-9a-f:.]+$/i
@@ -41,15 +46,13 @@ const toCanonicalIPv6 = host => {
 module.exports = (
   ranges,
   ipv4,
-  { extractIPv4 = extractMappedIPv4, malformedIsLocal = false } = {}
+  { extractIPv4 = extractMappedIPv4, ambiguousIsLocal = false } = {}
 ) => {
   const regex = new RegExp(`^(${ranges.join('|')})$`, 'i')
 
   const isLocalAddress = input => {
-    if (input === null || (typeof input !== 'string' && typeof input !== 'object')) {
-      throw new TypeError('Expected a string')
-    }
-    let host = String(input)
+    let host = toHostnameString(input)
+    if (ambiguousIsLocal) host = toResolvedIPv6(host)
 
     const len = host.length
     if (len > 2 && host[0] === '[' && host[len - 1] === ']') {
@@ -60,7 +63,7 @@ module.exports = (
     if (!looksLikeIPv6(host)) return false
 
     const canonical = toCanonicalIPv6(host)
-    if (canonical === null) return malformedIsLocal
+    if (canonical === null) return ambiguousIsLocal
 
     const embeddedIPv4 = extractIPv4(canonical)
     return embeddedIPv4 ? ipv4(embeddedIPv4) : regex.test(canonical)

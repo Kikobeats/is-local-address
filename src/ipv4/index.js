@@ -2,4 +2,6 @@
 
 const { site, global } = require('./ranges')
 
-module.exports = require('./create')(site.concat(global))
+module.exports = require('./create')(site.concat(global), {
+  ambiguousIsLocal: true
+})
