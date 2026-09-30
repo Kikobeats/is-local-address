@@ -3,7 +3,7 @@
 module.exports = {
   site: [
     // 100::/64
-    '100:(:[0-9a-f]{0,4}){0,6}',
+    '100:(:[0-9a-f]{0,4}){0,4}',
     // 2001:10::/28 (ORCHID)
     '2001:1[0-9a-f]:([0-9a-f]{0,4}:){0,7}[0-9a-f]{0,4}',
     // 2001:2::/28
@@ -24,10 +24,6 @@ module.exports = {
     'fec0:([0-9a-f]{0,4}:){0,7}[0-9a-f]{0,4}'
   ],
   global: [
-    // ::ffff:192.168.0.1, any embedded IPv4; the hex form is decoded by extractMappedIPv4 instead
-    '::f{4}:(?:0:)?[0-9]{1,3}(?:\\.[0-9]{1,3}){3}',
-    // 64:ff9b::/96 (NAT64, RFC 6052): embeds an arbitrary IPv4
-    '64:ff9b::[0-9]{1,3}(?:\\.[0-9]{1,3}){3}',
     // 2001::/32 (Teredo, RFC 4380), compressed form 2001::…, embeds public IPv4 addresses
     '2001:(:[0-9a-f]{0,4}){0,6}',
     // 2001::/32 (Teredo), explicit zero second hextet 2001:0:…
