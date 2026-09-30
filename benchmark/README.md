@@ -1,14 +1,14 @@
 # Benchmark
 
-| Name | Duration | Size |
+| Name | Duration | Size (min+gzip) |
 |------|----------|------|
-| `is-local-address` | 2.18ms | 101B |
-| `ipaddr.js` | 2.31ms (+6%) | 35.16KB (+35547%) |
-| `private-ip` | 2.72ms (+25%) | 45.65KB (+46183%) |
+| `is-local-address` | 0.71ms | 961B |
+| `ipaddr.js` | 2.39ms (+239%) | 3.70KB (+294%) |
+| `private-ip` | 2.11ms (+198%) | 6.72KB (+616%) |
 
 # Comparison
 
-| Input | Expected | `is-local-address` (100.00%) | `ipaddr.js` (97.20%) | `private-ip` (81.31%) |
+| Input | Expected | `is-local-address` (100.00%) | `ipaddr.js` (93.33%) | `private-ip` (73.33%) |
 |-------|----------|-------|-------|-------|
 | :: | ✅ | ✅ | ✅ | ✅ |
 | ::1 | ✅ | ✅ | ✅ | ✅ |
@@ -68,6 +68,10 @@
 | 2001:: | ✅ | ✅ | ✅ | ✅ |
 | 2001::a:b:c | ✅ | ✅ | ✅ | ✅ |
 | 2001::ffff:ffff:ffff:ffff:ffff:ffff | ✅ | ✅ | ✅ | ✅ |
+| 2001:0:4136:e378:8000:63bf:3fff:fdd2 | ✅ | ✅ | ✅ | ❌ |
+| 2001:0000:4136:e378:8000:63bf:3fff:fdd2 | ✅ | ✅ | ✅ | ❌ |
+| 2001:0:0:1:: | ✅ | ✅ | ✅ | ❌ |
+| 2001:0:ffff:ffff:ffff:ffff:ffff:ffff | ✅ | ✅ | ✅ | ❌ |
 | 2001:1f:ffff:ffff:ffff:ffff:ffff:ffff | ✅ | ✅ | ✅ | ❌ |
 | 2001:2:ffff:ffff:ffff:ffff:ffff:ffff | ✅ | ✅ | ✅ | ❌ |
 | 2001:2f::a:b:c | ✅ | ✅ | ✅ | ✅ |
@@ -91,6 +95,11 @@
 | fbff:ffff:ffff:ffff:ffff:ffff:ffff:ffff | ✅ | ✅ | ❌ | ❌ |
 | fec0:: | ✅ | ✅ | ❌ | ❌ |
 | localhost | ✅ | ✅ | ✅ | `undefined` |
+| localhost. | ✅ | ✅ | ❌ | `undefined` |
+| foo.localhost | ✅ | ✅ | ❌ | `undefined` |
+| zzq7x4random.localhost | ✅ | ✅ | ❌ | `undefined` |
+| localhost.localdomain | ✅ | ✅ | ❌ | `undefined` |
+| LOCALHOST | ✅ | ✅ | ❌ | `undefined` |
 | ::1fff:0:0.0.0.0 | ❌ | ❌ | ❌ | ❌ |
 | ::1fff:0:10.0.0.0 | ❌ | ❌ | ❌ | ❌ |
 | ::1fff:0.0.0.0 | ❌ | ❌ | ❌ | ❌ |
@@ -112,8 +121,12 @@
 | 223.231.138.242 | ❌ | ❌ | ❌ | ❌ |
 | 2000:: | ❌ | ❌ | ❌ | ❌ |
 | 2000::ffff:ffff:ffff:ffff:ffff:ffff | ❌ | ❌ | ❌ | ❌ |
+| 2001:200:: | ❌ | ❌ | ❌ | ❌ |
 | 2001:db7:: | ❌ | ❌ | ❌ | ❌ |
 | 2001:db7:ffff:ffff:ffff:ffff:ffff:ffff | ❌ | ❌ | ❌ | ❌ |
 | 2001:db9:: | ❌ | ❌ | ❌ | ❌ |
 | example.com:80 | ❌ | ❌ | ❌ | `undefined` |
 | example.com | ❌ | ❌ | ❌ | `undefined` |
+| localhost.com | ❌ | ❌ | ❌ | `undefined` |
+| notlocalhost | ❌ | ❌ | ❌ | `undefined` |
+| example.localhost.com | ❌ | ❌ | ❌ | `undefined` |

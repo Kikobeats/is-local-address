@@ -1,3 +1,5 @@
 'use strict'
 
-module.exports = require('./create')(require('./ranges'), require('../ipv4'))
+const { site, global } = require('./ranges')
+
+module.exports = require('./create')(site.concat(global), require('../ipv4'))

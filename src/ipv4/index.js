@@ -1,3 +1,5 @@
 'use strict'
 
-module.exports = require('./create')(require('./ranges'))
+const { site, global } = require('./ranges')
+
+module.exports = require('./create')(site.concat(global))
