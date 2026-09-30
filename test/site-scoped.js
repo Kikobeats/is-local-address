@@ -8,7 +8,9 @@ const { externalIPs, internalIPs } = require('./cases')
 
 // Internal fixtures that fall in ranges hosts outside a site can hold, which
 // the site-scoped export must reject: RFC 6598 shared space (100.64.0.0/10),
-// NAT64 (64:ff9b::/96), Teredo (2001::/32) and 6to4 (2002::/16).
+// NAT64 (64:ff9b::/96), Teredo (2001::/32) and 6to4 (2002::/16). The 6a44
+// relay (192.88.99.2) and local-use NAT64 (64:ff9b:1::/48) are rejected too
+// and covered in test/iana.js.
 const BEYOND_SITE = /^(?:100\.|64:ff9b::|2001:0{0,4}:|2002:)/i
 
 const beyondSite = internalIPs.filter(({ ip }) => BEYOND_SITE.test(ip))

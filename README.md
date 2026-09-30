@@ -6,9 +6,9 @@
 
 Most solutions typically determine local IP addresses by checking DNS, which is slow and unreliable. This implementation uses the Bogon IP address specification for static validation, delivering:
 
-- **5x faster** than alternative approaches (DNS-based)
-- **3-5x smaller** bundle than similar libraries: 1.21KB min+gzip, vs 3.70KB for `ipaddr.js` and 6.72KB for `private-ip`
-- **100% accuracy** on all RFC-defined private IP ranges
+- **No DNS lookups**: a static check, no network round trip
+- **About 3x smaller than `ipaddr.js` and 5x smaller than `private-ip`**: 1.24KB min+gzip, vs 3.70KB and 6.72KB
+- **Every IANA special-purpose range that is not globally reachable**, IPv4 and IPv6, checked against the IANA registries, with two exceptions: IPv4-mapped addresses (`::ffff:0:0/96`) classify by the IPv4 they embed, and the unassigned remainder of `2001::/23` is not covered
 - **Zero dependencies** for core functionality
 - **Supports IPv4 and IPv6** including edge cases and mapped addresses
 
@@ -64,9 +64,9 @@ isLocalAddress(new URL('https://127.0.0.1').hostname) // false
 
 ## Site scope
 
-The default export answers "is this address non-public", which is the question an SSRF guard asks, so it includes every bogon range. Some of those ranges are held by hosts outside your own network: RFC 6598 shared address space (`100.64.0.0/10`, carrier-grade NAT) is shared with every other subscriber of the same provider, and Teredo (`2001::/32`), 6to4 (`2002::/16`) and NAT64 (`64:ff9b::/96`) embed public IPv4 addresses.
+The default export answers "is this address non-public", which is the question an SSRF guard asks, so it includes every bogon range. Some of those ranges are held by hosts outside your own network: RFC 6598 shared address space (`100.64.0.0/10`, carrier-grade NAT) is shared with every other subscriber of the same provider, Teredo (`2001::/32`), 6to4 (`2002::/16`) and NAT64 (`64:ff9b::/96`, and the local-use `64:ff9b:1::/48`) embed public IPv4 addresses, and the 6a44 relay (`192.88.99.2`) is a provider's anycast service.
 
-When the question is "is this address inside one administrative network", for example before reflecting a CORS origin, use the site-scoped export. It drops those four ranges and keeps the rest: loopback, RFC 1918, ULA, link-local, documentation and benchmarking prefixes, and the multicast and reserved blocks, which are kept whole because none of them can be a unicast origin.
+When the question is "is this address inside one administrative network", for example before reflecting a CORS origin, use the site-scoped export. It drops those ranges and keeps the rest: loopback, RFC 1918, ULA, link-local, documentation and benchmarking prefixes, and the multicast and reserved blocks, which are kept whole because none of them can be a unicast origin.
 
 ```js
 const isSiteScoped = require('is-local-address/site-scoped')

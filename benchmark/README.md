@@ -2,9 +2,9 @@
 
 | Name | Duration | Size (min+gzip) |
 |------|----------|------|
-| `is-local-address` | 1.20ms | 1.21KB |
-| `ipaddr.js` | 1.70ms (+42%) | 3.70KB (+206%) |
-| `private-ip` | 2.23ms (+86%) | 6.72KB (+455%) |
+| `is-local-address` | 1.21ms | 1.24KB |
+| `ipaddr.js` | 1.73ms (+43%) | 3.70KB (+198%) |
+| `private-ip` | 2.19ms (+82%) | 6.72KB (+442%) |
 
 # Comparison
 
