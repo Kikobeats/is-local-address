@@ -7,7 +7,7 @@
 Most solutions typically determine local IP addresses by checking DNS, which is slow and unreliable. This implementation uses the Bogon IP address specification for static validation, delivering:
 
 - **5x faster** than alternative approaches (DNS-based)
-- **3-5x smaller** bundle than similar libraries: 1.21KB min+gzip, vs 3.70KB for `ipaddr.js` and 6.72KB for `private-ip`
+- **2-4x smaller** bundle than similar libraries: 1.55KB min+gzip, vs 3.70KB for `ipaddr.js` and 6.72KB for `private-ip`
 - **100% accuracy** on all RFC-defined private IP ranges
 - **Zero dependencies** for core functionality
 - **Supports IPv4 and IPv6** including edge cases and mapped addresses
@@ -20,7 +20,7 @@ Instead of performing DNS lookups or complex regex validations, `is-local-addres
 
 1. **No network calls** - Validates against RFC specifications offline
 2. **Regex matching** - Optimized patterns for IPv4, and for IPv6 after it is canonicalized by the platform's own `URL` parser, so every spelling of an address gets the same answer
-3. **Minimal overhead** - About 1.2KB min+gzip
+3. **Minimal overhead** - About 1.5KB min+gzip
 
 This makes it ideal for:
 - High-performance APIs and microservices
@@ -100,6 +100,24 @@ isLocalAddress('::ffff:808:808') // false, 8.8.8.8
 isLocalAddress('64:ff9b::a00:1') // true, 10.0.0.1
 isLocalAddress('64:ff9b::8.8.8.8') // false
 ```
+
+## Resolver spellings
+
+An SSRF guard has to classify the address a request actually reaches, not the text it was given. URL parsers and system resolvers accept many spellings of the same IPv4 address, so the default, `/ipv4` and `/ipv6` exports classify both the input and what the platform turns it into, and report local if either is local:
+
+```js
+isLocalAddress('0x7f.1') // true, 127.0.0.1
+isLocalAddress('2130706433') // true, 127.0.0.1
+isLocalAddress('0177.0.0.1') // true, 127.0.0.1
+isLocalAddress('127.0.0.1\u00ad') // true, soft hyphen is ignored
+isLocalAddress('127.0.0.1\u0000.evil.com') // true, C resolvers stop at NUL
+isLocalAddress('::\uff11') // true, fullwidth digit
+isLocalAddress('0x8.0x8.0x8.0x8') // false, 8.8.8.8
+```
+
+When platforms disagree, the answer is local if any of them resolves to a local address: `012.168.127.1` is `10.168.127.1` for the URL standard and glibc, and `12.168.127.1` for macOS.
+
+The site-scoped export does the opposite: it trusts only the literal spelling, so `127.1` or `0x7f.0.0.1` are not site-scoped, because an unusual spelling is not evidence of being inside your network.
 
 ## License
 
