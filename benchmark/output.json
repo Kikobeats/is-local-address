@@ -3,24 +3,24 @@
     "performance": [
       {
         "name": "is-local-address",
-        "duration": 0.71,
+        "duration": 1.2,
         "unit": "ms"
       },
       {
         "name": "ipaddr.js",
-        "duration": 2.39,
+        "duration": 1.7,
         "unit": "ms"
       },
       {
         "name": "private-ip",
-        "duration": 2.11,
+        "duration": 2.23,
         "unit": "ms"
       }
     ],
     "bundleSize": [
       {
         "name": "is-local-address",
-        "size": "961B"
+        "size": "1.21KB"
       },
       {
         "name": "ipaddr.js",
@@ -159,12 +159,6 @@
     },
     {
       "input": "64:ff9b::0.0.0.0",
-      "is-local-address": true,
-      "ipaddr.js": true,
-      "private-ip": true
-    },
-    {
-      "input": "64:ff9b::16.10.11.1",
       "is-local-address": true,
       "ipaddr.js": true,
       "private-ip": true
@@ -684,6 +678,12 @@
       "is-local-address": false,
       "ipaddr.js": false,
       "private-ip": false
+    },
+    {
+      "input": "64:ff9b::16.10.11.1",
+      "is-local-address": false,
+      "ipaddr.js": true,
+      "private-ip": true
     },
     {
       "input": "2000::ffff:ffff:ffff:ffff:ffff:ffff",
