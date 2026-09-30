@@ -7,7 +7,7 @@
 Most solutions typically determine local IP addresses by checking DNS, which is slow and unreliable. This implementation uses the Bogon IP address specification for static validation, delivering:
 
 - **Faster** than DNS-based checks
-- **2-4x smaller** bundle than similar libraries: 1.55KB min+gzip, vs 3.70KB for `ipaddr.js` and 6.72KB for `private-ip`
+- **2-3.7x smaller** bundle than similar libraries: 1.81KB min+gzip, vs 3.70KB for `ipaddr.js` and 6.72KB for `private-ip`
 - **100% accuracy** on all RFC-defined private IP ranges
 - **Zero dependencies** for core functionality
 - **Supports IPv4 and IPv6** including edge cases and mapped addresses
@@ -20,7 +20,7 @@ Instead of performing DNS lookups or complex regex validations, `is-local-addres
 
 1. **No network calls** - Validates against RFC specifications offline
 2. **Regex matching** - Optimized patterns for IPv4, and for IPv6 after it is canonicalized by the platform's own `URL` parser, so every spelling of an address gets the same answer
-3. **Minimal overhead** - About 1.5KB min+gzip
+3. **Minimal overhead** - About 1.8KB min+gzip
 
 This makes it ideal for:
 - High-performance APIs and microservices
@@ -113,9 +113,12 @@ isLocalAddress('127.0.0.1\u00ad') // true, soft hyphen is ignored
 isLocalAddress('127.0.0.1\u0000.evil.com') // true, C resolvers stop at NUL
 isLocalAddress('::\uff11') // true, fullwidth digit
 isLocalAddress('0x8.0x8.0x8.0x8') // false, 8.8.8.8
+isLocalAddress('0127.0.0.1') // true, macOS reads leading zeros as decimal
+isLocalAddress('6425673729') // true, macOS wraps 2^32 + 127.0.0.1
+isLocalAddress('[::1]:80') // true, a URL parser reads the host
 ```
 
-When platforms disagree, the answer is local if any of them resolves to a local address: `012.168.127.1` is `10.168.127.1` for the URL standard and glibc, and `12.168.127.1` for macOS.
+When platforms disagree, the answer is local if any of them resolves to a local address. In a four-part address made only of digits, macOS reads leading zeros as decimal while the URL standard reads them as octal, so `012.168.127.1` is `12.168.127.1` for macOS and `10.168.127.1` for URL parsers. macOS also wraps a single number past 2^32 where URL parsers reject it. glibc follows `inet_aton`; it is not covered by the tests here.
 
 The site-scoped export does the opposite: it trusts only the literal spelling, so `127.1` or `0x7f.0.0.1` are not site-scoped, because an unusual spelling is not evidence of being inside your network.
 

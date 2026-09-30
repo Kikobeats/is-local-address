@@ -3,24 +3,24 @@
     "performance": [
       {
         "name": "is-local-address",
-        "duration": 1.8,
+        "duration": 1.31,
         "unit": "ms"
       },
       {
         "name": "ipaddr.js",
-        "duration": 1.94,
+        "duration": 1.68,
         "unit": "ms"
       },
       {
         "name": "private-ip",
-        "duration": 3.08,
+        "duration": 2.18,
         "unit": "ms"
       }
     ],
     "bundleSize": [
       {
         "name": "is-local-address",
-        "size": "1.55KB"
+        "size": "1.81KB"
       },
       {
         "name": "ipaddr.js",
