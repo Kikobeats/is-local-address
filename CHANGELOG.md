@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.4.2 (2026-09-30)
+
+
+### Bug Fixes
+
+* match IPv6 hex digits case-insensitively ([#33](https://github.com/Kikobeats/is-local-address/issues/33)) ([e707ed9](https://github.com/Kikobeats/is-local-address/commit/e707ed97ea20c543e8d34edcd0b958df90a7fbae))
+
 ### 2.4.1 (2026-09-30)
 
 ## 2.4.0 (2026-09-30)
