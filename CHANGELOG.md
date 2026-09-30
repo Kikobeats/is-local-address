@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.4.0 (2026-09-30)
+
+
+### Features
+
+* add site-scoped export ([#31](https://github.com/Kikobeats/is-local-address/issues/31)) ([be401c0](https://github.com/Kikobeats/is-local-address/commit/be401c0e4f6cacf2e0a188ec7c04e245cb849c6d))
+
 ### 2.3.7 (2026-09-30)
 
 
