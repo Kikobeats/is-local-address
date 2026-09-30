@@ -1,10 +1,10 @@
 'use strict'
 
 const NOT_PRINTABLE_ASCII = /[^\x20-\x7e]/
+const STRIP_NOT_PRINTABLE = /[^\x20-\x7e]/g
 const NUMERIC_LABEL = /^(?:\d+|0x[0-9a-f]*)$/i
 const NUMERIC_LABEL_LAST_CHARACTER = /^[\da-fx.]$/i
-const NON_ASCII = /[\u0080-\uffff]/g
-const URL_ONLY_SYNTAX = /[/?#@\\:%[\]]/
+const HOSTNAME_CHARS = /[^a-z0-9.-]/
 const DOTTED_QUAD = /^(?:(?:0|[1-9]\d{0,2})\.){3}(?:0|[1-9]\d{0,2})$/
 
 const truncateAtNul = host => {
@@ -26,21 +26,24 @@ const toUrlHostname = host => {
   }
 }
 
-const toUrlHostnameWithoutUrlSyntax = host =>
-  URL_ONLY_SYNTAX.test(host) ? null : toUrlHostname(host)
-
 const toResolvedHostname = hostname => {
-  if (NOT_PRINTABLE_ASCII.test(hostname)) {
-    return toUrlHostnameWithoutUrlSyntax(truncateAtNul(hostname))
+  if (
+    HOSTNAME_CHARS.test(hostname) ||
+    (!DOTTED_QUAD.test(hostname) && endsInANumber(hostname))
+  ) {
+    return toUrlHostname(truncateAtNul(hostname))
   }
-  if (DOTTED_QUAD.test(hostname) || !endsInANumber(hostname)) return null
-  return toUrlHostnameWithoutUrlSyntax(hostname)
+  return null
 }
 
-const toResolvedIPv6 = address =>
-  NOT_PRINTABLE_ASCII.test(address)
-    ? truncateAtNul(address).normalize('NFKC').replace(NON_ASCII, '')
-    : address
+const toResolvedIPv6 = address => {
+  if (!NOT_PRINTABLE_ASCII.test(address) && !address.endsWith(' ')) return address
+  let host = truncateAtNul(address)
+  if (NOT_PRINTABLE_ASCII.test(host)) {
+    host = host.normalize('NFKC').replace(STRIP_NOT_PRINTABLE, '')
+  }
+  return host.trimEnd()
+}
 
 const toHostnameString = input => {
   if (input === null || (typeof input !== 'string' && typeof input !== 'object')) {

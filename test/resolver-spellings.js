@@ -19,6 +19,11 @@ const loopbackSpellings = [
   '127\u30020.0.1',
   '127.0.0.1\u0000.evil.com',
   '127.0.0.1\t',
+  '127.0.0.1 ',
+  '127.0.0.%31',
+  '127.0.0.1\\.evil.com',
+  '0x7f.1 ',
+  'localhost ',
   '\uff2c\uff2f\uff23\uff21\uff2c\uff28\uff2f\uff33\uff34',
   'localhost\u00ad'
 ]
@@ -31,7 +36,12 @@ const loopbackIPv6Spellings = [
   '::1\u00ad',
   '::1\u0000evil',
   '::ffff:\uff11\uff12\uff17.0.0.1',
-  '::ffff:127\u30020.0.1'
+  '::ffff:127\u30020.0.1',
+  '[::1]\n',
+  '[::1]\t',
+  '[::\n1]',
+  '\n[::1]',
+  '[::1] '
 ]
 
 for (const host of loopbackSpellings.concat(privateSpellings)) {
@@ -67,7 +77,8 @@ test('public addresses stay public in every spelling', t => {
     '\uff45\uff58\uff41\uff4d\uff50\uff4c\uff45.com',
     '127.0.0.1.evil.com',
     'localhost.evil.com',
-    '127.0.0.%31',
+    '8.8.8.8 ',
+    'example.com ',
     '09.0.0.1'
   ]) {
     t.false(isLocalAddress(host), host)

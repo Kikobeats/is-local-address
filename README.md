@@ -6,7 +6,7 @@
 
 Most solutions typically determine local IP addresses by checking DNS, which is slow and unreliable. This implementation uses the Bogon IP address specification for static validation, delivering:
 
-- **5x faster** than alternative approaches (DNS-based)
+- **Faster** than DNS-based checks
 - **2-4x smaller** bundle than similar libraries: 1.55KB min+gzip, vs 3.70KB for `ipaddr.js` and 6.72KB for `private-ip`
 - **100% accuracy** on all RFC-defined private IP ranges
 - **Zero dependencies** for core functionality
