@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.4.5 (2026-11-15)
+
+
+### Bug Fixes
+
+* **types:** ship declarations for the ipv4 and ipv6 subpaths ([#38](https://github.com/Kikobeats/is-local-address/issues/38)) ([57351d6](https://github.com/Kikobeats/is-local-address/commit/57351d66b6676288cc63213e0f5d58f62e00f441)), closes [#37](https://github.com/Kikobeats/is-local-address/issues/37)
+
 ### 2.4.4 (2026-09-30)
 
 
