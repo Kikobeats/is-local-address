@@ -117,11 +117,11 @@
     "pre-commit": "npx nano-staged"
   },
   "tsd": {
-    "directory": "test",
     "compilerOptions": {
+      "esModuleInterop": true,
       "module": "nodenext",
-      "moduleResolution": "nodenext",
-      "esModuleInterop": true
-    }
+      "moduleResolution": "nodenext"
+    },
+    "directory": "test"
   }
 }
